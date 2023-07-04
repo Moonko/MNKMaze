@@ -1,12 +1,14 @@
 final class Maze {
-    let size: Int
+    let rows: Int
+    let columns: Int
 
     private(set) var squares: [Bool] // visited or not
     private(set) var path = [Int]()
 
-    init(size: Int) {
-        self.size = size
-        self.squares = [Bool](repeating: false, count: size * size)
+    init(rows: Int, columns: Int) {
+        self.rows = rows
+        self.columns = columns
+        self.squares = [Bool](repeating: false, count: rows * columns)
     }
 
     func generatePath(startSquare: Int = 0) {
@@ -24,16 +26,15 @@ final class Maze {
             }
             _ = currentStack.popLast()
         }
-
         path = newPath
     }
 
     func randomUnvisitedNeighbor(for square: Int) -> Int? {
         [
-            (square % size) != 0 ?          square - 1 : nil,       // left
-            square > size ?                 square - size : nil,    // top
-            ((square + 1) % size) != 0 ?    square + 1 : nil,       // right
-            square < (size * (size - 1)) ?  square + size : nil,    // bottom
+            (square % columns) != 0 ?          square - 1 : nil,       // left
+            square > columns ?                 square - columns : nil,    // top
+            ((square + 1) % columns) != 0 ?    square + 1 : nil,       // right
+            square < (columns * (rows - 1)) ?  square + columns : nil,    // bottom
         ].compactMap { $0 }.filter { !squares[$0] }.randomElement()
     }
 

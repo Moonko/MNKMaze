@@ -40,7 +40,7 @@ final class MazeView: UIView {
     }
 
     func animatePathGeneration() {
-        let duration = 10.0
+        let duration = 20.0
 
         let pathAnimation = CABasicAnimation(keyPath: "strokeEnd")
         pathAnimation.fromValue = 0.0
@@ -60,14 +60,16 @@ final class MazeView: UIView {
         guard let maze, bounds.size != .zero else { return }
 
         let borderWidth: CGFloat = bounds.width / 50
-        let lineWidth = (bounds.width - borderWidth * CGFloat(maze.size + 1)) / CGFloat(maze.size)
+        let side = maze.rows > maze.columns ? maze.rows : maze.columns
+        let lineWidth = (bounds.height - borderWidth * CGFloat(side + 1)) / CGFloat(side)
+        let xOffset = (bounds.width - (borderWidth * CGFloat(maze.columns + 1)) - (lineWidth * CGFloat(maze.columns))) / 2
 
         func coordinates(for square: Int) -> CGPoint {
-            let xIndex = CGFloat(square % maze.size)
-            let yIndex = CGFloat(square / maze.size)
+            let xIndex = CGFloat(square % maze.columns)
+            let yIndex = CGFloat(square / maze.columns)
             return CGPoint(
-                x: borderWidth + xIndex * (lineWidth + borderWidth) + lineWidth / 2,
-                y: borderWidth + yIndex * (lineWidth + borderWidth) + lineWidth / 2
+                x: xOffset + borderWidth + xIndex * (lineWidth + borderWidth) + lineWidth / 2,
+                y: xOffset + borderWidth + yIndex * (lineWidth + borderWidth) + lineWidth / 2
             )
         }
 
